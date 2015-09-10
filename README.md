@@ -18,4 +18,4 @@ Port: "COMxx"
 
 Programmer: "USBtinyISP"
 
-![alt tag](https://github.com/incmve/ESP-pimatic/img.png)
+![alt tag](https://github.com/incmve/ESP-pimatic/blob/master/img.png)
