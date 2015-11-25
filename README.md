@@ -19,3 +19,6 @@ Port: "COMxx"
 Programmer: "USBtinyISP"
 
 ![alt tag](https://github.com/incmve/ESP-pimatic/blob/master/img.png)
+
+For the 201 see this schema
+http://www.14core.com/wp-content/uploads/2015/10/Flashing-The-ESP8266-ESP201-Module-Board-With-TTL-UART.jpg
