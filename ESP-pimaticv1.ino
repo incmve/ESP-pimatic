@@ -1,16 +1,21 @@
 // Import required libraries
 #include "ESP8266WiFi.h"
+#include <dht.h>
+
+// Define pins
+#define DHT11_PIN 4  // DHT11 pin
 
 // WiFi parameters
 const char* ssid = "SSID";
-const char* password = "WIFIPASS";
+const char* password = "PASSWORD";
 
 // pimatic parameters
 const char* PimaticUser = "admin";
 const char* PimaticPassword = "admin";
-const char* PimaticHost = "192.168.0.x";
-const int PimaticPort = 80;
+const char* PimaticHost = "192.168.0.20";
+const int PimaticPort = 8080;
 
+dht DHT;
 
 void setup() {
   
@@ -37,7 +42,20 @@ void setup() {
 }
 
 void loop() {
- 
+  DHT.read11(DHT11_PIN);
+  Serial.println("read");
+                  float h = DHT.humidity;
+                float t = DHT.temperature;
+                Serial.println("temp");
+                Serial.println(t);
+                Serial.println("Hum");
+                Serial.println(h);
+  //              if (isnan(h) || isnan(t)) {
+ //   Serial.println("Failed to read from DHT sensor!");
+ //   return;
+ // }
+                int temperature = t - 2;
+                
   Serial.print("Connecting to ");
   Serial.println(PimaticHost);
   
@@ -54,15 +72,15 @@ void loop() {
 // YWRtaW46WndlbWJAZA==
 
 String yourdata;
-yourdata = "{\"type\": \"value\", \"valueOrExpression\": \"777\"}";
+yourdata = "{\"type\": \"value\", \"valueOrExpression\": \"" + String(h) + "\"}";
   
   
-    client.print("PATCH /api/variables/test");
+    client.print("PATCH /api/variables/test1");
     client.print(" HTTP/1.1\r\n");
     client.print("Authorization: Basic ");
-    client.print("YWRtaW46bWFyY2VsOTk="); //user:password encoded to base64 via https://www.base64encode.org/
+    client.print("YWRtaW46YWRtaW4=");
     client.print("\r\n");
-    client.print("PimaticHost: 192.168.0.x\r\n");
+    client.print("PimaticHost: mvegte.myqnapcloud.com\r\n");
     client.print("Content-Type:application/json\r\n");
     client.print("Content-Length: ");
     client.print(yourdata.length());
@@ -72,20 +90,6 @@ yourdata = "{\"type\": \"value\", \"valueOrExpression\": \"777\"}";
 
    delay(500);
 
-const char* status = "true";
-
-   client.print("GET /api/device/aqua4/changeStateTo?state=");
-    client.print(status);
-    client.print(" HTTP/1.1\r\n");
-    client.print("Authorization: Basic "); //user:password encoded to base64 via https://www.base64encode.org/
-    client.print("YWRtaW46bWFyY2VsOTk=");
-    client.print("\r\n");
-    client.print("PimaticHost: 192.168.0.x\r\n");
-    client.print("Content-Type:application/json\r\n");
-    client.print("Content-Length: ");
-    client.print(yourdata.length());
-    client.print("\r\n\r\n");
-    client.print(yourdata);   
   
   
   // Read all the lines of the reply from server and print them to Serial
@@ -101,4 +105,3 @@ const char* status = "true";
   delay(10000);
  
 }
-
