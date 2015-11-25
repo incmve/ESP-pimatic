@@ -1,9 +1,12 @@
 // Import required libraries
 #include "ESP8266WiFi.h"
+
 #include <dht.h>
 
 // Define pins
 #define DHT11_PIN 4  // DHT11 pin
+
+
 
 // WiFi parameters
 const char* ssid = "SSID";
@@ -15,10 +18,10 @@ const char* PimaticPassword = "admin";
 const char* PimaticHost = "192.168.0.20";
 const int PimaticPort = 8080;
 
+
 dht DHT;
 
 void setup() {
-  
   // Start Serial
   Serial.begin(115200);
   delay(10);
@@ -42,22 +45,32 @@ void setup() {
 }
 
 void loop() {
-  DHT.read11(DHT11_PIN);
-  Serial.println("read");
+  
+int  chk = DHT.read11(DHT11_PIN);
+  switch (chk)
+  {
+    case DHTLIB_OK:  
+    Serial.print("OK,\t"); 
+    break;
+    case DHTLIB_ERROR_CHECKSUM: 
+    Serial.print("Checksum error,\t"); 
+    break;
+    case DHTLIB_ERROR_TIMEOUT: 
+    Serial.print("Time out error,\t"); 
+    break;
+    default: 
+    Serial.print("Unknown error,\t"); 
+    break;
+  }
                   float h = DHT.humidity;
                 float t = DHT.temperature;
                 Serial.println("temp");
                 Serial.println(t);
                 Serial.println("Hum");
                 Serial.println(h);
-  //              if (isnan(h) || isnan(t)) {
- //   Serial.println("Failed to read from DHT sensor!");
- //   return;
- // }
-                int temperature = t - 2;
-                
-  Serial.print("Connecting to ");
-  Serial.println(PimaticHost);
+  
+                Serial.print("Connecting to ");
+                Serial.println(PimaticHost);
   
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
@@ -70,7 +83,6 @@ void loop() {
   // This will send the request to the server
 
 // YWRtaW46WndlbWJAZA==
-
 String yourdata;
 yourdata = "{\"type\": \"value\", \"valueOrExpression\": \"" + String(h) + "\"}";
   
