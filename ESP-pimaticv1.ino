@@ -92,7 +92,7 @@ yourdata = "{\"type\": \"value\", \"valueOrExpression\": \"" + String(h) + "\"}"
     client.print("Authorization: Basic ");
     client.print("YWRtaW46YWRtaW4=");
     client.print("\r\n");
-    client.print("PimaticHost: mvegte.myqnapcloud.com\r\n");
+    client.print("PimaticHost: ***.***.***.***m\r\n");
     client.print("Content-Type:application/json\r\n");
     client.print("Content-Length: ");
     client.print(yourdata.length());
